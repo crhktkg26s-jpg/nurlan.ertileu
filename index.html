@@ -13,10 +13,10 @@
   <style>
     :root {
       --bg: #f8fafc;
-      --surface: rgba(255, 255, 255, 0.9);
+      --surface: rgba(255, 255, 255, 0.92);
       --surface-solid: #ffffff;
       --border: rgba(226, 232, 240, 0.9);
-      --border-hover: rgba(124, 58, 237, 0.35);
+      --border-hover: rgba(124, 58, 237, 0.4);
       --text-main: #090d16;
       --text-muted: #526071;
       --text-subtle: #94a3b8;
@@ -426,7 +426,7 @@
       box-shadow: 0 4px 14px rgba(9, 13, 22, 0.2);
     }
 
-    /* Сетка карточек */
+    /* Сетка кейсов */
     .cases-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -443,7 +443,6 @@
       box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.04);
       display: flex;
       flex-direction: column;
-      cursor: pointer;
     }
 
     .video-card.hidden {
@@ -451,65 +450,28 @@
     }
 
     .video-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       border-color: var(--border-hover);
-      box-shadow: 0 24px 48px -12px var(--shadow-color);
+      box-shadow: 0 20px 40px -12px var(--shadow-color);
     }
 
-    /* Интерактивная обложка карточки */
-    .card-thumb {
+    /* БЛОК ВИДЕО ВНУТРИ КАРТОЧКИ */
+    .video-viewport {
       position: relative;
       width: 100%;
-      padding-bottom: 56.25%;
-      background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+      padding-bottom: 56.25%; /* 16:9 */
+      background: #090d16;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-bottom: 1px solid var(--border);
     }
 
-    .card-thumb::after {
-      content: "";
+    .video-viewport iframe {
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.25) 0%, transparent 70%);
-      opacity: 0.6;
-      transition: opacity 0.3s;
-    }
-
-    .video-card:hover .card-thumb::after {
-      opacity: 1;
-    }
-
-    .play-btn-circle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(8px);
-      z-index: 2;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
-    }
-
-    .video-card:hover .play-btn-circle {
-      transform: translate(-50%, -50%) scale(1.14);
-      background: #ffffff;
-      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.4);
-    }
-
-    .play-btn-circle svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--primary-purple);
-      margin-left: 3px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
     .card-body {
@@ -546,7 +508,7 @@
     }
 
     .video-title {
-      font-size: 1.25rem;
+      font-size: 1.22rem;
       font-weight: 800;
       margin-bottom: 8px;
       color: var(--text-main);
@@ -570,17 +532,18 @@
       border-top: 1px solid var(--border);
     }
 
-    .open-card-link {
+    .drive-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       color: var(--primary);
       font-size: 0.88rem;
       font-weight: 700;
+      text-decoration: none;
       transition: gap 0.2s;
     }
 
-    .video-card:hover .open-card-link {
+    .drive-link:hover {
       gap: 10px;
       color: var(--primary-purple);
     }
@@ -588,113 +551,6 @@
     .video-card.set-production {
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 244, 255, 0.95) 100%);
       border-color: rgba(124, 58, 237, 0.35);
-    }
-
-    /* МОДАЛЬНОЕ ОКНО-КАРТОЧКА С ВИДЕОПЛЕЕРОМ */
-    .video-modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 10000;
-      background: rgba(9, 13, 22, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .video-modal-backdrop.active {
-      display: flex;
-      opacity: 1;
-    }
-
-    .modal-case-card {
-      position: relative;
-      width: 100%;
-      max-width: 960px;
-      background: #000;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15);
-      transform: scale(0.95);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .video-modal-backdrop.active .modal-case-card {
-      transform: scale(1);
-    }
-
-    .modal-close-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 42px;
-      height: 42px;
-      background: rgba(0, 0, 0, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 50%;
-      color: #fff;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-      backdrop-filter: blur(8px);
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .modal-close-btn:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: rotate(90deg);
-    }
-
-    .modal-video-wrap {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      background: #000;
-    }
-
-    .modal-video-wrap iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .modal-card-info {
-      background: #0d121f;
-      padding: 20px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #fff;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .modal-card-title {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-
-    .modal-card-link {
-      color: var(--primary-cyan);
-      font-size: 0.9rem;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .modal-card-link:hover {
-      text-decoration: underline;
     }
 
     /* Услуги */
@@ -981,12 +837,12 @@
       </div>
     </section>
 
-    <!-- Секция кейсов -->
+    <!-- Секция кейсов (ВИДЕО СРАЗУ ВНУТРИ КАРТОЧЕК) -->
     <section id="portfolio" class="portfolio-section">
       <div class="section-head">
         <div>
           <h2>Избранные кейсы</h2>
-          <p>Нажмите на любую карточку для просмотра ролика</p>
+          <p>Каждое видео можно воспроизвести прямо на сайте</p>
         </div>
 
         <div class="filter-bar">
@@ -1001,11 +857,9 @@
       <div class="cases-grid">
 
         <!-- 1. Концерт Мот -->
-        <div class="video-card" data-cat="music" onclick="openVideoModal('1OO-BN3s84F0vCZJVPLyHZF9M6dOLBJXp', 'Концерт МОТ')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="music">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1OO-BN3s84F0vCZJVPLyHZF9M6dOLBJXp/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1015,17 +869,15 @@
             <h3 class="video-title">Концерт МОТ</h3>
             <p class="video-desc">Стадионный лайв: динамичная съемка в условиях сложного сценического света, синхронизация монтажного темпа с музыкой и передача энергетики зала.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1OO-BN3s84F0vCZJVPLyHZF9M6dOLBJXp/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 2. Сниппет музыканта -->
-        <div class="video-card" data-cat="music" onclick="openVideoModal('1-HI2RGXZMRwKYE8UDt9eOFMA_uLPTws1', 'Сниппет для музыканта')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="music">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1-HI2RGXZMRwKYE8UDt9eOFMA_uLPTws1/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1035,17 +887,15 @@
             <h3 class="video-title">Сниппет для музыканта</h3>
             <p class="video-desc">Тизер к музыкальному релизу: стилизованная картинка, выверенный темпоритм под бит и работа с глубокими тенями.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1-HI2RGXZMRwKYE8UDt9eOFMA_uLPTws1/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 3. Стилист -->
-        <div class="video-card" data-cat="commercial" onclick="openVideoModal('1TXYXVCYLdF6WeONhSNm5qXvPV0dOA0YC', 'Имиджевое видео для стилиста')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="commercial">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1TXYXVCYLdF6WeONhSNm5qXvPV0dOA0YC/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1055,17 +905,15 @@
             <h3 class="video-title">Имиджевое видео для стилиста</h3>
             <p class="video-desc">Плавное движение камеры, чистые интерьерные кадры, акцент на текстурах тканей и визуальной подаче личного бренда.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1TXYXVCYLdF6WeONhSNm5qXvPV0dOA0YC/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 4. Skin Store -->
-        <div class="video-card" data-cat="commercial" onclick="openVideoModal('1Xf8DhMWe7UpEQNK0WK3-KTkFDcCG5YaN', 'Skin Store (Магазин косметики)')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="commercial">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1Xf8DhMWe7UpEQNK0WK3-KTkFDcCG5YaN/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1075,17 +923,15 @@
             <h3 class="video-title">Skin Store (Магазин косметики)</h3>
             <p class="video-desc">Коммерческая съемка продукции: мягкий свет, макропланы упаковок и деликатная премиальная цветовая коррекция.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1Xf8DhMWe7UpEQNK0WK3-KTkFDcCG5YaN/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 5. White Hill Dance Studio 1 -->
-        <div class="video-card" data-cat="commercial" onclick="openVideoModal('1F5HdHWZNj5zn6GWIRG_ysO32pWsugHRl', 'White Hill Dance Studio (Part I)')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="commercial">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1F5HdHWZNj5zn6GWIRG_ysO32pWsugHRl/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1095,17 +941,15 @@
             <h3 class="video-title">White Hill Dance Studio (Part I)</h3>
             <p class="video-desc">Пластика хореографии, контрастные световые схемы, неоновые акценты и синхронизация монтажных склеек с битом трека.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1F5HdHWZNj5zn6GWIRG_ysO32pWsugHRl/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 6. White Hill Dance Studio 2 -->
-        <div class="video-card" data-cat="commercial" onclick="openVideoModal('1E-ODIqrv_zGm6Fc6cpVVjKYScxH8keVr', 'White Hill Dance Studio (Part II)')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="commercial">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1E-ODIqrv_zGm6Fc6cpVVjKYScxH8keVr/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1115,17 +959,15 @@
             <h3 class="video-title">White Hill Dance Studio (Part II)</h3>
             <p class="video-desc">Динамичная подача командного танцевального номера: быстрые смены планов, подчеркивающие синхронность команды.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1E-ODIqrv_zGm6Fc6cpVVjKYScxH8keVr/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 7. День города -->
-        <div class="video-card" data-cat="events" onclick="openVideoModal('1aZ76fOG7d6Wu_5ZesJfD_fuLKlr3lS2d', 'День города')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="events">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1aZ76fOG7d6Wu_5ZesJfD_fuLKlr3lS2d/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1135,17 +977,15 @@
             <h3 class="video-title">День города</h3>
             <p class="video-desc">Масштабный городской праздник: репортажные планы локаций, живые эмоции зрителей и создание общей праздничной атмосферы.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1aZ76fOG7d6Wu_5ZesJfD_fuLKlr3lS2d/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 8. День металлурга (ERG) -->
-        <div class="video-card" data-cat="events" onclick="openVideoModal('14P1aYEusgp8NmcExbSZoFb2vX33VXOHQ', 'День металлурга (ERG)')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="events">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/14P1aYEusgp8NmcExbSZoFb2vX33VXOHQ/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1155,17 +995,15 @@
             <h3 class="video-title">День металлурга (ERG)</h3>
             <p class="video-desc">Многотысячный ивент: главная сцена, концертный свет, пиротехника и мощное послевкусие в итоговом aftermovie.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/14P1aYEusgp8NmcExbSZoFb2vX33VXOHQ/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 9. ХК Актобе -->
-        <div class="video-card" data-cat="events" onclick="openVideoModal('1M51H3hikNgCaP4bbYgZaRjE7FDrAn4fJ', 'ХК Актобе')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="events">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1M51H3hikNgCaP4bbYgZaRjE7FDrAn4fJ/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1175,17 +1013,15 @@
             <h3 class="video-title">ХК Актобе</h3>
             <p class="video-desc">Высокие ледовые скорости, съемка силовых приемов у бортов, реакция трибун и передача напряжения матча.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1M51H3hikNgCaP4bbYgZaRjE7FDrAn4fJ/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 10. ФК Актобе -->
-        <div class="video-card" data-cat="events" onclick="openVideoModal('1xeW8Of5ezbjUM2fqHEr6fuXcAhWy1Hf7', 'ФК Актобе')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card" data-cat="events">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1xeW8Of5ezbjUM2fqHEr6fuXcAhWy1Hf7/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1195,17 +1031,15 @@
             <h3 class="video-title">ФК Актобе</h3>
             <p class="video-desc">Репортаж матча: опасные моменты, празднование голов, заряд фанатов и плотный ритмичный монтаж.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1xeW8Of5ezbjUM2fqHEr6fuXcAhWy1Hf7/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 11. Ассистент режиссера (НА ПЛОЩАДКЕ) -->
-        <div class="video-card set-production" data-cat="set" onclick="openVideoModal('131QAXp1dRfRJiQX9DtuBqt0zIz6QqMMA', 'Ассистент режиссера (1st AD)')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card set-production" data-cat="set">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/131QAXp1dRfRJiQX9DtuBqt0zIz6QqMMA/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1215,17 +1049,15 @@
             <h3 class="video-title">Ассистент режиссера (1st AD)</h3>
             <p class="video-desc">Организация и контроль съемочного графика на площадке: координация дублей, тайминг департаментов и содействие главному режиссеру.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/131QAXp1dRfRJiQX9DtuBqt0zIz6QqMMA/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- 12. Ассистент оператора и гаффер (В САМОМ КОНЦЕ) -->
-        <div class="video-card set-production" data-cat="set" onclick="openVideoModal('1OjNbaLNt3YGNY8r3_Yxs-n8UpGFTAlRB', 'Ассистент оператора и гаффер')">
-          <div class="card-thumb">
-            <div class="play-btn-circle">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="video-card set-production" data-cat="set">
+          <div class="video-viewport">
+            <iframe src="https://drive.google.com/file/d/1OjNbaLNt3YGNY8r3_Yxs-n8UpGFTAlRB/preview" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="card-body">
             <div class="card-meta">
@@ -1235,7 +1067,7 @@
             <h3 class="video-title">Ассистент оператора и гаффер</h3>
             <p class="video-desc">Построение световых схем на съемочной площадке: работа с приборами, диффузией, флагами и помощь оператору-постановщику.</p>
             <div class="card-action">
-              <span class="open-card-link">Смотреть видео &rarr;</span>
+              <a href="https://drive.google.com/file/d/1OjNbaLNt3YGNY8r3_Yxs-n8UpGFTAlRB/view" target="_blank" class="drive-link">Открыть оригинал &rarr;</a>
             </div>
           </div>
         </div>
@@ -1320,20 +1152,6 @@
     </section>
   </main>
 
-  <!-- ВСПЛЫВАЮЩАЯ КАРТОЧКА С ВИДЕОПЛЕЕРОМ (МОДАЛЬНОЕ ОКНО) -->
-  <div id="videoModal" class="video-modal-backdrop" onclick="handleBackdropClick(event)">
-    <div class="modal-case-card">
-      <button class="modal-close-btn" onclick="closeVideoModal()">&times;</button>
-      <div class="modal-video-wrap">
-        <iframe id="modalIframe" src="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      </div>
-      <div class="modal-card-info">
-        <div id="modalTitle" class="modal-card-title">Название кейса</div>
-        <a id="modalDriveLink" href="#" target="_blank" class="modal-card-link">Открыть на Google Drive &rarr;</a>
-      </div>
-    </div>
-  </div>
-
   <!-- Футер -->
   <footer>
     <div class="container footer-wrap">
@@ -1356,41 +1174,8 @@
     </div>
   </footer>
 
-  <!-- Скрипты модального плеера и фильтров -->
+  <!-- Скрипт фильтрации -->
   <script>
-    const modal = document.getElementById('videoModal');
-    const iframe = document.getElementById('modalIframe');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDriveLink = document.getElementById('modalDriveLink');
-
-    function openVideoModal(fileId, titleText) {
-      modalTitle.textContent = titleText;
-      modalDriveLink.href = `https://drive.google.com/file/d/${fileId}/view`;
-      iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
-      
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeVideoModal() {
-      iframe.src = '';
-      modal.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-
-    function handleBackdropClick(e) {
-      if (e.target === modal) {
-        closeVideoModal();
-      }
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        closeVideoModal();
-      }
-    });
-
-    // Фильтрация кейсов
     function filterCases(category, element) {
       const cards = document.querySelectorAll('.video-card');
       const buttons = document.querySelectorAll('.filter-btn');
