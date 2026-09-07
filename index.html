@@ -12,7 +12,7 @@
   <style>
     :root {
       --bg: #f8fafc;
-      --surface: rgba(255, 255, 255, 0.9);
+      --surface: rgba(255, 255, 255, 0.92);
       --surface-solid: #ffffff;
       --border: rgba(226, 232, 240, 0.9);
       --border-hover: rgba(124, 58, 237, 0.4);
@@ -25,7 +25,7 @@
       --primary-cyan: #06b6d4;
       --grad-accent: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #06b6d4 100%);
       --grad-glow: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(124, 58, 237, 0.12));
-      --shadow-color: rgba(37, 99, 235, 0.12);
+      --shadow-color: rgba(37, 99, 235, 0.14);
       
       --radius-sm: 12px;
       --radius-md: 18px;
@@ -345,7 +345,7 @@
       color: var(--primary);
     }
 
-    /* СЕКЦИЯ КЕЙСОВ — НОВЫЙ ДИЗАЙН БЕЗ НАЗВАНИЙ (ГАЛЕРЕЯ) */
+    /* СЕКЦИЯ КЕЙСОВ — С ОБЛОЖКАМИ И НАЗВАНИЯМИ */
     .portfolio-section {
       padding-bottom: 90px;
     }
@@ -397,99 +397,66 @@
       border-color: var(--text-main);
     }
 
-    /* Сетка чистых карточек */
+    /* Сетка карточек */
     .cases-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 22px;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 26px;
     }
 
-    .case-card-pure {
-      position: relative;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      aspect-ratio: 16 / 10;
-      background: #090d16;
+    .case-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
       border: 1px solid var(--border);
-      box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.05);
       text-decoration: none;
-      display: block;
+      display: flex;
+      flex-direction: column;
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
-    .case-card-pure.hidden {
+    .case-card.hidden {
       display: none;
     }
 
-    .case-card-pure:hover {
-      transform: translateY(-5px);
+    .case-card:hover {
+      transform: translateY(-6px);
       border-color: var(--border-hover);
-      box-shadow: 0 20px 40px -10px var(--shadow-color);
+      box-shadow: 0 20px 42px -10px var(--shadow-color);
     }
 
-    /* Динамичные сочные фоны карточек */
-    .card-backdrop-bg {
+    /* Обложка видео */
+    .card-cover {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      background: #090d16;
+      overflow: hidden;
+    }
+
+    .card-cover img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.45s ease;
+    }
+
+    .case-card:hover .card-cover img {
+      transform: scale(1.06);
+    }
+
+    .card-cover::after {
+      content: "";
       position: absolute;
       inset: 0;
-      background-size: cover;
-      background-position: center;
-      transition: transform 0.4s ease;
+      background: linear-gradient(180deg, rgba(9, 13, 22, 0.15) 0%, rgba(9, 13, 22, 0.65) 100%);
     }
 
-    .case-card-pure:hover .card-backdrop-bg {
-      transform: scale(1.04);
-    }
-
-    /* Градиентные заглушки для визуала */
-    .bg-1 { background: radial-gradient(circle at top left, #3b82f6, #090d16 70%); }
-    .bg-2 { background: radial-gradient(circle at center, #8b5cf6, #0c0a2a 75%); }
-    .bg-3 { background: radial-gradient(circle at bottom right, #06b6d4, #090d16 80%); }
-    .bg-4 { background: radial-gradient(circle at top, #ec4899, #1a0b2e 75%); }
-    .bg-5 { background: radial-gradient(circle at center, #6366f1, #060914 75%); }
-    .bg-6 { background: radial-gradient(circle at top right, #14b8a6, #0c1a2e 80%); }
-    .bg-7 { background: radial-gradient(circle at bottom, #f59e0b, #1e0d29 80%); }
-    .bg-8 { background: radial-gradient(circle at center, #ef4444, #130a1c 80%); }
-    .bg-9 { background: radial-gradient(circle at top left, #0ea5e9, #081426 75%); }
-    .bg-10 { background: radial-gradient(circle at center, #10b981, #0a1b1a 80%); }
-    .bg-11 { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #090d16 100%); }
-    .bg-12 { background: linear-gradient(135deg, #0f172a 0%, #3b0764 60%, #0284c7 100%); }
-
-    .card-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(9, 13, 22, 0.75) 100%);
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card-top-tag {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .badge-pill {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
-      padding: 4px 12px;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .badge-pill.accent-pill {
-      background: var(--grad-accent);
-      border: none;
-    }
-
-    .card-center-play {
+    .play-btn-circle {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -501,37 +468,86 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      z-index: 2;
       transition: transform 0.25s ease, background-color 0.2s;
     }
 
-    .case-card-pure:hover .card-center-play {
+    .case-card:hover .play-btn-circle {
       transform: translate(-50%, -50%) scale(1.14);
       background: #ffffff;
       box-shadow: 0 12px 30px rgba(124, 58, 237, 0.45);
     }
 
-    .card-center-play svg {
+    .play-btn-circle svg {
       width: 20px;
       height: 20px;
       fill: var(--primary-purple);
       margin-left: 3px;
     }
 
-    .card-bottom-info {
+    .card-body {
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-meta-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 0.84rem;
-      font-weight: 700;
-      font-family: var(--font-display);
+      margin-bottom: 8px;
     }
 
-    .card-bottom-info span {
+    .tag-pill {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--grad-glow);
+      color: var(--primary-purple);
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(124, 58, 237, 0.15);
+    }
+
+    .card-num {
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-footer {
+      margin-top: auto;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 4px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .case-card:hover .card-footer span:last-child {
+      color: var(--primary-purple);
+    }
+
+    .case-card.highlight-set {
+      background: linear-gradient(180deg, #ffffff 0%, #f5f4ff 100%);
+      border-color: rgba(124, 58, 237, 0.35);
     }
 
     /* Услуги */
@@ -704,10 +720,7 @@
       }
       .cases-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .case-card-pure {
-        aspect-ratio: 16 / 9;
+        gap: 18px;
       }
       .press-card {
         padding: 18px;
@@ -720,7 +733,7 @@
 </head>
 <body>
 
-  <!-- Хедер -->
+  <!-- Навигация -->
   <header>
     <div class="container nav-wrap">
       <a href="#" class="brand">
@@ -795,12 +808,12 @@
       </div>
     </section>
 
-    <!-- СЕКЦИЯ КЕЙСОВ — ЧИСТАЯ ВИДЕОВИТРИНА БЕЗ НАЗВАНИЙ -->
+    <!-- СЕКЦИЯ КЕЙСОВ — С ОБЛОЖКАМИ И НАЗВАНИЯМИ -->
     <section id="portfolio" class="portfolio-section">
       <div class="section-head">
         <div>
           <h2>Избранные кейсы</h2>
-          <p>Нажмите для мгновенного полноэкранного просмотра</p>
+          <p>Нажмите на карточку для просмотра видео</p>
         </div>
 
         <div class="filter-bar">
@@ -815,217 +828,229 @@
       <div class="cases-grid">
 
         <!-- 1. Концерт Мот -->
-        <a href="https://drive.google.com/file/d/1OO-BN3s84F0vCZJVPLyHZF9M6dOLBJXp/view" target="_blank" class="case-card-pure" data-cat="music">
-          <div class="card-backdrop-bg bg-1"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill accent-pill">Live Show</span>
-              <span class="badge-pill">01</span>
+        <a href="https://drive.google.com/file/d/1OO-BN3s84F0vCZJVPLyHZF9M6dOLBJXp/view" target="_blank" class="case-card" data-cat="music">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80" alt="Концерт МОТ" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Live Show</span>
+              <span class="card-num">01</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">Концерт МОТ</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>HD 4K &nearr;</span>
+              <span>HD 4K &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 2. Сниппет музыканта -->
-        <a href="https://drive.google.com/file/d/1-HI2RGXZMRwKYE8UDt9eOFMA_uLPTws1/view" target="_blank" class="case-card-pure" data-cat="music">
-          <div class="card-backdrop-bg bg-2"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill accent-pill">Music Video</span>
-              <span class="badge-pill">02</span>
+        <a href="https://drive.google.com/file/d/1-HI2RGXZMRwKYE8UDt9eOFMA_uLPTws1/view" target="_blank" class="case-card" data-cat="music">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80" alt="Сниппет для музыканта" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Music Promo</span>
+              <span class="card-num">02</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">Сниппет для музыканта</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Reels 9:16 &nearr;</span>
+              <span>Reels &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 3. Стилист -->
-        <a href="https://drive.google.com/file/d/1TXYXVCYLdF6WeONhSNm5qXvPV0dOA0YC/view" target="_blank" class="case-card-pure" data-cat="commercial">
-          <div class="card-backdrop-bg bg-3"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">Fashion</span>
-              <span class="badge-pill">03</span>
+        <a href="https://drive.google.com/file/d/1TXYXVCYLdF6WeONhSNm5qXvPV0dOA0YC/view" target="_blank" class="case-card" data-cat="commercial">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&auto=format&fit=crop&q=80" alt="Имиджевое видео для стилиста" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Fashion</span>
+              <span class="card-num">03</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">Имиджевое видео для стилиста</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Editorial &nearr;</span>
+              <span>Editorial &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 4. Skin Store -->
-        <a href="https://drive.google.com/file/d/1Xf8DhMWe7UpEQNK0WK3-KTkFDcCG5YaN/view" target="_blank" class="case-card-pure" data-cat="commercial">
-          <div class="card-backdrop-bg bg-4"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">Commercial</span>
-              <span class="badge-pill">04</span>
+        <a href="https://drive.google.com/file/d/1Xf8DhMWe7UpEQNK0WK3-KTkFDcCG5YaN/view" target="_blank" class="case-card" data-cat="commercial">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop&q=80" alt="Skin Store (Магазин косметики)" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Commercial</span>
+              <span class="card-num">04</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">Skin Store (Магазин косметики)</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Beauty Promo &nearr;</span>
+              <span>Beauty &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 5. White Hill Dance Studio 1 -->
-        <a href="https://drive.google.com/file/d/1F5HdHWZNj5zn6GWIRG_ysO32pWsugHRl/view" target="_blank" class="case-card-pure" data-cat="commercial">
-          <div class="card-backdrop-bg bg-5"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">Dance Promo</span>
-              <span class="badge-pill">05</span>
+        <a href="https://drive.google.com/file/d/1F5HdHWZNj5zn6GWIRG_ysO32pWsugHRl/view" target="_blank" class="case-card" data-cat="commercial">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=800&auto=format&fit=crop&q=80" alt="White Hill Dance Studio (Part I)" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Dance Promo</span>
+              <span class="card-num">05</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">White Hill Dance Studio (Part I)</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Choreography &nearr;</span>
+              <span>Promo &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 6. White Hill Dance Studio 2 -->
-        <a href="https://drive.google.com/file/d/1E-ODIqrv_zGm6Fc6cpVVjKYScxH8keVr/view" target="_blank" class="case-card-pure" data-cat="commercial">
-          <div class="card-backdrop-bg bg-6"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">Dance Promo</span>
-              <span class="badge-pill">06</span>
+        <a href="https://drive.google.com/file/d/1E-ODIqrv_zGm6Fc6cpVVjKYScxH8keVr/view" target="_blank" class="case-card" data-cat="commercial">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800&auto=format&fit=crop&q=80" alt="White Hill Dance Studio (Part II)" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Choreography</span>
+              <span class="card-num">06</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">White Hill Dance Studio (Part II)</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Dynamic Cut &nearr;</span>
+              <span>Choreo &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 7. День города -->
-        <a href="https://drive.google.com/file/d/1aZ76fOG7d6Wu_5ZesJfD_fuLKlr3lS2d/view" target="_blank" class="case-card-pure" data-cat="events">
-          <div class="card-backdrop-bg bg-7"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">City Event</span>
-              <span class="badge-pill">07</span>
+        <a href="https://drive.google.com/file/d/1aZ76fOG7d6Wu_5ZesJfD_fuLKlr3lS2d/view" target="_blank" class="case-card" data-cat="events">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&auto=format&fit=crop&q=80" alt="День города" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">City Event</span>
+              <span class="card-num">07</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">День города</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Festival Recap &nearr;</span>
+              <span>Festival &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 8. День металлурга (ERG) -->
-        <a href="https://drive.google.com/file/d/14P1aYEusgp8NmcExbSZoFb2vX33VXOHQ/view" target="_blank" class="case-card-pure" data-cat="events">
-          <div class="card-backdrop-bg bg-8"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">Mega Event</span>
-              <span class="badge-pill">08</span>
+        <a href="https://drive.google.com/file/d/14P1aYEusgp8NmcExbSZoFb2vX33VXOHQ/view" target="_blank" class="case-card" data-cat="events">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&auto=format&fit=crop&q=80" alt="День металлурга (ERG)" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">ERG Festival</span>
+              <span class="card-num">08</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">День металлурга (ERG)</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Aftermovie &nearr;</span>
+              <span>Aftermovie &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 9. ХК Актобе -->
-        <a href="https://drive.google.com/file/d/1M51H3hikNgCaP4bbYgZaRjE7FDrAn4fJ/view" target="_blank" class="case-card-pure" data-cat="events">
-          <div class="card-backdrop-bg bg-9"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">Ice Hockey</span>
-              <span class="badge-pill">09</span>
+        <a href="https://drive.google.com/file/d/1M51H3hikNgCaP4bbYgZaRjE7FDrAn4fJ/view" target="_blank" class="case-card" data-cat="events">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1580748141549-71748dbe0bdc?w=800&auto=format&fit=crop&q=80" alt="ХК Актобе" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Ice Hockey</span>
+              <span class="card-num">09</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">ХК Актобе</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Game Action &nearr;</span>
+              <span>Matchday &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 10. ФК Актобе -->
-        <a href="https://drive.google.com/file/d/1xeW8Of5ezbjUM2fqHEr6fuXcAhWy1Hf7/view" target="_blank" class="case-card-pure" data-cat="events">
-          <div class="card-backdrop-bg bg-10"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill">Football</span>
-              <span class="badge-pill">10</span>
+        <a href="https://drive.google.com/file/d/1xeW8Of5ezbjUM2fqHEr6fuXcAhWy1Hf7/view" target="_blank" class="case-card" data-cat="events">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=80" alt="ФК Актобе" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Football</span>
+              <span class="card-num">10</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">ФК Актобе</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Matchday &nearr;</span>
+              <span>Match Recap &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 11. Ассистент режиссера (НА ПЛОЩАДКЕ) -->
-        <a href="https://drive.google.com/file/d/131QAXp1dRfRJiQX9DtuBqt0zIz6QqMMA/view" target="_blank" class="case-card-pure" data-cat="set">
-          <div class="card-backdrop-bg bg-11"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill accent-pill">1st AD / Set</span>
-              <span class="badge-pill">11</span>
+        <a href="https://drive.google.com/file/d/131QAXp1dRfRJiQX9DtuBqt0zIz6QqMMA/view" target="_blank" class="case-card highlight-set" data-cat="set">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop&q=80" alt="Ассистент режиссера (1st AD)" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">1st AD / Set</span>
+              <span class="card-num">11</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">Ассистент режиссера (1st AD)</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Set Workflow &nearr;</span>
+              <span>On Set &rarr;</span>
             </div>
           </div>
         </a>
 
         <!-- 12. Ассистент оператора и гаффер (В САМОМ КОНЦЕ) -->
-        <a href="https://drive.google.com/file/d/1OjNbaLNt3YGNY8r3_Yxs-n8UpGFTAlRB/view" target="_blank" class="case-card-pure" data-cat="set">
-          <div class="card-backdrop-bg bg-12"></div>
-          <div class="card-overlay">
-            <div class="card-top-tag">
-              <span class="badge-pill accent-pill">Gaffer & AC</span>
-              <span class="badge-pill">12</span>
+        <a href="https://drive.google.com/file/d/1OjNbaLNt3YGNY8r3_Yxs-n8UpGFTAlRB/view" target="_blank" class="case-card highlight-set" data-cat="set">
+          <div class="card-cover">
+            <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=800&auto=format&fit=crop&q=80" alt="Ассистент оператора и гаффер" loading="lazy">
+            <div class="play-btn-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-line">
+              <span class="tag-pill">Gaffer & AC</span>
+              <span class="card-num">12</span>
             </div>
-            <div class="card-center-play">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="card-bottom-info">
+            <h3 class="card-title">Ассистент оператора и гаффер</h3>
+            <div class="card-footer">
               <span>Смотреть видео</span>
-              <span>Lighting Set &nearr;</span>
+              <span>Lighting &rarr;</span>
             </div>
           </div>
         </a>
@@ -1135,7 +1160,7 @@
   <!-- Скрипт фильтрации -->
   <script>
     function filterCases(category, element) {
-      const cards = document.querySelectorAll('.case-card-pure');
+      const cards = document.querySelectorAll('.case-card');
       const buttons = document.querySelectorAll('.filter-btn');
 
       buttons.forEach(btn => btn.classList.remove('active'));
